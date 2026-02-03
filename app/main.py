@@ -15,3 +15,10 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"message": "Family Meal Planner API running!"}
+
+
+@app.post("/parse-ingredients/")
+def parse_ingredients(text: str):
+    # Simple regex parser (placeholder for now)
+    # Later: spaCy or custom NLP
+    return {"parsed": [{"name": text, "quantity": 2, "unit": ""}]}
