@@ -1,8 +1,19 @@
+import os
 from sqlmodel import SQLModel, create_engine, Session
+from dotenv import load_dotenv
 
-# Pas dit aan naar jouw DB URL
-DATABASE_URL = "postgresql://user:password@localhost:5432/family_meal_planner"
+# 1. Laad de variabelen uit het .env bestand
+load_dotenv()
 
+# 2. Haal de DATABASE_URL op
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Veiligheidscheck: stop het programma als de URL mist
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL is niet ingesteld in het .env bestand!")
+
+# 3. Maak de engine aan
+# echo=True is handig tijdens development (je ziet alle SQL queries in je terminal)
 engine = create_engine(DATABASE_URL, echo=True)
 
 def get_session():

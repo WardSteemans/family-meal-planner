@@ -4,6 +4,7 @@ backend/__pycache__/
 *.pyc
 .env
 .pytest_cache/
+backend/.env
 
 # --- React Native / Mobile ---
 mobile/node_modules/
