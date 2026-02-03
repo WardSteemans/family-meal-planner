@@ -2,14 +2,14 @@ import uuid
 from datetime import date
 from typing import List, Optional, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
-from schemas.common import MealType
+
+from ..schemas.common import MealType
 
 if TYPE_CHECKING:
     from .family import Family, UserProfile
     from .recipy import Recipe
 
 
-# KOPPELTABEL (Join Table)
 class MealPlanAssignment(SQLModel, table=True):
     __tablename__ = "meal_plan_assignments"
 
@@ -26,13 +26,10 @@ class MealPlan(SQLModel, table=True):
     recipe_id: uuid.UUID = Field(foreign_key="recipes.id")
 
     date: date
-    # Enum werkt direct in SQLModel als je het type hint
     meal_type: MealType
     notes: Optional[str] = None
 
-    # Relaties
     family: "Family" = Relationship(back_populates="meal_plans")
     recipe: "Recipe" = Relationship()
 
-    # Many-to-Many relatie via de koppeltabel
     assigned_users: List["UserProfile"] = Relationship(link_model=MealPlanAssignment)
