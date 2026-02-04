@@ -1,24 +1,20 @@
+# app/main.py
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from .models.database import init_db
+from .routers import Users
 
-app = FastAPI(title="Family Meal Planner API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Create tables
+    await init_db()
+    yield
+    # Shutdown (optional cleanup)
 
-# CORS voor React Native (later aanpassen naar je domein)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # dev only!
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = FastAPI(lifespan=lifespan)
+
+app.include_router(Users.router, prefix="/api/v1", tags=["users"])
 
 @app.get("/")
 def read_root():
-    return {"message": "Family Meal Planner API running!"}
-
-
-@app.post("/parse-ingredients/")
-def parse_ingredients(text: str):
-    # Simple regex parser (placeholder for now)
-    # Later: spaCy or custom NLP
-    return {"parsed": [{"name": text, "quantity": 2, "unit": ""}]}
+    return {"message": "Family Meal Planner API is running"}

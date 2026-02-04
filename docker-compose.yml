@@ -1,18 +1,54 @@
-# docker-compose.yml
-version: '3.8'
+version: '3.9'
 
 services:
   db:
-    image: postgres:15
+    image: postgres:16-alpine
+    container_name: family-meal-planner-db
     restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: family_meal_planner
     ports:
-      - "5432:5432"
+      - "5432:5432"             # expose to host so you can connect with TablePlus / pgAdmin
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d family_meal_planner"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: family-meal-planner-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/family_meal_planner
+      # Add more env vars later (OPENAI_API_KEY, etc.)
+    volumes:
+      - ./backend:/app
+    command: >
+      uvicorn app.main:app
+        --host 0.0.0.0
+        --port 8000
+        --reload
+        --reload-dir /app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
