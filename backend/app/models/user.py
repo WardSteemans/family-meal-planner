@@ -20,3 +20,10 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    #added family link
+    family_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
+    family: Mapped["Family"] = mapped_column(relationship="Family", back_populates="users")
+
+    def __repr__(self):
+        return f"User(id={self.id}, email={self.email}, name={self.name})"
