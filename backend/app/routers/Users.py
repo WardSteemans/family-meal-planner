@@ -3,10 +3,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from ..dependencies.auth import get_current_user
 from ..models.database import get_db
 from ..models.user import User
 from ..schemas.user import UserCreate, UserOut
 from ..utils import password
+from typing import Annotated
 
 router = APIRouter()
 
@@ -39,3 +41,14 @@ async def register_user(user_in: UserCreate, db: AsyncSession = Depends(get_db))
     await db.refresh(new_user)
 
     return new_user
+
+# sanity check endpoint
+@router.get("/me", response_model=UserOut)
+async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+    """
+    Get current user's information
+    Requires valid JWT authentication
+    :param current_user:
+    :return:
+    """
+    return current_user
