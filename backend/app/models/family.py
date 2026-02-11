@@ -19,6 +19,12 @@ class Family(Base):
     #relationship to access family.users
     users: Mapped[List["User"]] = relationship("User", back_populates="family")
 
+    ingredients: Mapped[List["Ingredient"]] = relationship(
+        "Ingredient", back_populates="family", cascade="all, delete-orphan"
+    )
+    recipes: Mapped[List["Recipe"]] = relationship(
+        "Recipe", back_populates="family", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"Family(id={self.id}, name={self.name})"
