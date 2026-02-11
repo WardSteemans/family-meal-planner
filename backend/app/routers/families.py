@@ -1,13 +1,14 @@
+from typing import Annotated
+
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql.annotation import Annotated
 from starlette import status
 
-from backend.app.dependencies.auth import get_current_user
-from backend.app.models import User, Family
-from backend.app.models.database import get_db
-from backend.app.schemas.family import FamilyOut, FamilyCreate
+from ..dependencies.auth import get_current_user
+from ..models import User, Family
+from ..models.database import get_db
+from ..schemas.family import FamilyOut, FamilyCreate
 from ..models.family import Family
 from ..schemas.family import FamilyUpdate, FamilyCreate, FamilyOut
 

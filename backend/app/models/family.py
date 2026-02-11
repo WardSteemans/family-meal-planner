@@ -1,10 +1,12 @@
 import uuid
 from datetime import datetime
+from typing import List
+
 from sqlalchemy import Column, String
 
 
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
 
@@ -21,7 +23,8 @@ class Family(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, onupdate=datetime.utcnow)
 
     #relationship to access family.users
-    users: Mapped[list["User"]] = mapped_column(relationship="User", back_populates="family")
+    users: Mapped[List["User"]] = relationship("User", back_populates="family")
+
 
     def __repr__(self):
         return f"Family(id={self.id}, name={self.name})"

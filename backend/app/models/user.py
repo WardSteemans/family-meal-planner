@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
 
@@ -23,7 +23,7 @@ class User(Base):
 
     #added family link
     family_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
-    family: Mapped["Family"] = mapped_column(relationship="Family", back_populates="users")
+    family: Mapped[Optional["Family"]] = relationship("Family", back_populates="users")
 
     def __repr__(self):
         return f"User(id={self.id}, email={self.email}, name={self.name})"
