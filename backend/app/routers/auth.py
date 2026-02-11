@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from ..models.database import get_db
 from ..models.user import User
-from ..utils import password  # Ensure verify_password is in your utils
+from ..utils import password
 from ..auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from ..schemas.Token import Token
 
