@@ -1,4 +1,5 @@
-# app/models/__init__.py
 from .database import Base
 from .user import User
 from .family import Family
+from .ingredient import Ingredient
+from .recipy import Recipe
