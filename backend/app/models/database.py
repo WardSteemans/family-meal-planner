@@ -1,5 +1,3 @@
-# backend/app/models/database.py   (or rename to app/database.py if preferred)
-
 import os
 from dotenv import load_dotenv
 

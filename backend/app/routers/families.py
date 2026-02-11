@@ -6,11 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from ..dependencies.auth import get_current_user
-from ..models import User, Family
+from ..models import User
 from ..models.database import get_db
-from ..schemas.family import FamilyOut, FamilyCreate
 from ..models.family import Family
-from ..schemas.family import FamilyUpdate, FamilyCreate, FamilyOut
+from ..schemas.family import FamilyCreate, FamilyOut
 
 router = APIRouter()
 router.prefix = "/families"

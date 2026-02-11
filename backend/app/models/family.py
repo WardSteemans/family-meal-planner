@@ -1,13 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import List
-
-from sqlalchemy import Column, String
-
-
-
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from .database import Base
 
 class Family(Base):
