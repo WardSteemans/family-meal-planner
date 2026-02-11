@@ -16,6 +16,8 @@ class UserCreate(UserBase):
 # Schema for returning data to client (sensitive info removed)
 class UserOut(UserBase):
     id: UUID
+    is_active: bool
+    family_id: Optional[UUID] | None = None
     created_at: datetime
 
     # This config allows Pydantic to read data from SQLAlchemy models
