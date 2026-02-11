@@ -1,7 +1,9 @@
 import uuid
-from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy import String, Text, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .database import Base
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+
 
 class Recipe(Base):
     __tablename__ = "recipes"
@@ -14,8 +16,18 @@ class Recipe(Base):
     title: Mapped[str] = mapped_column(String(150), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    family_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("families.id"), nullable=False)
-    family: Mapped["Family"] = relationship("Family", back_populates="recipes")
+    # family_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("families.id"), nullable=False)
+    # family: Mapped["Family"] = relationship("Family", back_populates="recipes")
+    family_id: Mapped[uuid.UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("families.id"),
+        nullable=False,
+    )
+
+    family: Mapped["Family"] = relationship(
+        "Family",
+        back_populates="recipes",
+    )
 
     def __repr__(self):
         return f"Recipe(id={self.id}, title={self.title}, family_id={self.family_id})"
